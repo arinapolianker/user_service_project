@@ -12,10 +12,10 @@ async def create_user(user: User) -> int:
     return await user_repository.create_user(user)
 
 
-async def update_user(user_id: int, user: User):
-    return await user_repository.update_user(user_id, user)
+async def update_user_by_id(user_id: int, user: User):
+    return await user_repository.update_user_by_id(user_id, user)
 
 
-async def delete_user(user_id):
-    await user_repository.delete_user(user_id)
+async def delete_user_by_id(user_id):
+    await user_repository.delete_user_by_id(user_id)
 

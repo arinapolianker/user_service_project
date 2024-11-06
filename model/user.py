@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from typing import Optional
 
 from pydantic import BaseModel
@@ -11,5 +11,5 @@ class User(BaseModel):
     email: str
     age: int
     address: str
-    joining_date: datetime
+    joining_date: date
     registered: bool
