@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 from model.user import User
 from repository.database import database
 
-TABLE_NAME = "user"
+TABLE_NAME = "users"
 
 
 async def get_user_by_id(user_id: int) -> Optional[User]:
@@ -13,6 +13,12 @@ async def get_user_by_id(user_id: int) -> Optional[User]:
         return User(**result)
     else:
         return None
+
+
+async def get_all_users() -> List[User]:
+    query = f"SELECT * FROM {TABLE_NAME}"
+    results = await database.fetch_all(query)
+    return [User(**result) for result in results]
 
 
 async def create_user(user: User) -> int:
@@ -56,6 +62,20 @@ async def update_user_by_id(user_id: int, user: User):
         "address": user.address,
         "joining_date": user.joining_date,
         "registered": user.registered
+    }
+
+    await database.execute(query, values=values)
+
+
+async def register_user_by_id(user_id: int, registered: bool):
+    query = f"""
+        UPDATE {TABLE_NAME} 
+        SET registered = :registered
+        WHERE id = :user_id
+    """
+    values = {
+        "user_id": user_id,
+        "registered": registered
     }
 
     await database.execute(query, values=values)
