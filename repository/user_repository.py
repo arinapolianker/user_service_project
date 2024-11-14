@@ -15,7 +15,7 @@ async def get_user_by_id(user_id: int) -> Optional[User]:
         return None
 
 
-async def get_all_users() -> List[User]:
+async def get_all_users() -> Optional[List[User]]:
     query = f"SELECT * FROM {TABLE_NAME}"
     results = await database.fetch_all(query)
     return [User(**result) for result in results]
