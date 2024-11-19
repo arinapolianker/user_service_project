@@ -3,11 +3,11 @@ from typing import Optional, List
 from model.user import User
 from repository.database import database
 
-TABLE_NAME = "users"
+USER_TABLE_NAME = "users"
 
 
 async def get_user_by_id(user_id: int) -> Optional[User]:
-    query = f"SELECT * FROM {TABLE_NAME} WHERE id=:user_id"
+    query = f"SELECT * FROM {USER_TABLE_NAME} WHERE id=:user_id"
     result = await database.fetch_one(query, values={"user_id": user_id})
     if result:
         return User(**result)
@@ -16,14 +16,14 @@ async def get_user_by_id(user_id: int) -> Optional[User]:
 
 
 async def get_all_users() -> Optional[List[User]]:
-    query = f"SELECT * FROM {TABLE_NAME}"
+    query = f"SELECT * FROM {USER_TABLE_NAME}"
     results = await database.fetch_all(query)
     return [User(**result) for result in results]
 
 
 async def create_user(user: User) -> int:
     query = f"""
-        INSERT INTO {TABLE_NAME} (first_name, last_name, email, age, address, joining_date, registered)
+        INSERT INTO {USER_TABLE_NAME} (first_name, last_name, email, age, address, joining_date, registered)
         VALUES (:first_name, :last_name, :email, :age, :address, :joining_date, :registered)
     """
     values = {
@@ -43,7 +43,7 @@ async def create_user(user: User) -> int:
 
 async def update_user_by_id(user_id: int, user: User):
     query = f"""
-        UPDATE {TABLE_NAME} 
+        UPDATE {USER_TABLE_NAME} 
         SET first_name = :first_name,
         last_name = :last_name,
         email = :email,
@@ -69,7 +69,7 @@ async def update_user_by_id(user_id: int, user: User):
 
 async def register_user_by_id(user_id: int, registered: bool):
     query = f"""
-        UPDATE {TABLE_NAME} 
+        UPDATE {USER_TABLE_NAME} 
         SET registered = :registered
         WHERE id = :user_id
     """
@@ -82,7 +82,6 @@ async def register_user_by_id(user_id: int, registered: bool):
 
 
 async def delete_user_by_id(user_id: int):
-    query = f"DELETE FROM {TABLE_NAME} WHERE id=:user_id"
-    return await database.execute(query, values={"user_id": user_id})
-
+    query = f"DELETE FROM {USER_TABLE_NAME} WHERE id=:user_id"
+    await database.execute(query, values={"user_id": user_id})
 
